@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Chatbot powered by ChatGPT",
   "type": "module",
-  "main": "main.js",
+  "main": "GPT.mjs",
   "scripts": {
-    "start": "node main.js"
+    "start": "node GPT.mjs"
   },
   "author": "AJ76",
   "license": "MIT",
