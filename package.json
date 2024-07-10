@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Chatbot powered by ChatGPT",
   "type": "module",
-  "main": "GPT.mjs",
+  "main": "Index.html",
   "scripts": {
     "start": "node GPT.mjs"
   },
