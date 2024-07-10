@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Layout Example</title>
+    <style>
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            margin: 0;
+            padding: 0px;
+            background-color: #ffffff;
+        }
+
+        header {
+            height: 100px;
+            background-color: #ffffff;
+            /* Change this color as desired */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            flex-direction: row;
+
+        }
+
+        main {
+            display: flex;
+            height: calc(100vh - 100px);
+            /* Full height minus the header */
+        }
+
+        .sidebar {
+            width: 15%;
+            background-color: #ffffff;
+            /* Change this color as desired */
+            padding: 20px;
+        }
+
+        .menu {
+            width: 100%;
+            box-sizing: border-box;
+            height: 50px;
+            background-color: #008080;
+            margin-bottom: 10px;
+            padding: 15px;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 10px;
+        }
+
+
+        .feed {
+            width: 85%;
+            background-color: #ebf2ff;
+            border-radius: 20px 0px 0px 0px;
+            padding: 20px;
+            overflow: scroll;
+        }
+
+        .feed::-webkit-scrollbar {
+            display: none;
+        }
+
+        .searchbar {
+            width: 90%;
+            height: 50px;
+            margin-left: 30px;
+            border-radius: 10px;
+            background-color: aliceblue;
+        }
+
+        .searchbar input {
+            background-color: transparent;
+            border: none;
+            height: 50px;
+            border-radius: 10px;
+            padding: 0px 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .left {
+            width: 15%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .left img {
+            width: 100px;
+        }
+
+        .right {
+            box-sizing: border-box;
+            width: 85%;
+        }
+
+        .post {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px 20px 20px 20px;
+            margin-bottom: 20px;
+            max-width: 800px;
+            box-sizing: border-box;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .post-header i {
+            font-size: 30px;
+            border-radius: 50%;
+            margin-right: 15px;
+            margin-top: 2px;
+        }
+
+        .user-name {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .post-time {
+            color: #777;
+        }
+
+        .post-content {
+            margin-left: 45px;
+            font-weight: 400;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .post-comments {
+            margin-top: 10px;
+            margin-left: 50px;
+        }
+
+        .post-comments .comment {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .post-comments .comment::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background-color: #77a0ee;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .comment {
+            margin-bottom: 10px;
+            background-color: #ebf2ff;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .comment-user {
+            font-weight: bold;
+        }
+
+        .comment-text {
+            margin-left: 5px;
+        }
+
+        .show-comments,
+        .hide-comments {
+            background: none;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            color: #26bc9f;
+            border: solid 1px #00c3c3;
+            cursor: pointer;
+            /* margin-bottom: 10px; */
+        }
+
+
+        .send-button {
+            padding: 10px 20px;
+            width: 100%;
+            background-color: #388d7c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .image-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-preview {
+            max-width: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .post .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reply-section {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .reply-section textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .reply-section .send-button {
+            background-color: #008080;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .post .action-button {
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #008080;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .post .action-button:hover {
+            background-color: #005f5f;
+        }
+
+        .reply-section .send-button:hover {
+            background-color: #005f5f;
+        }
+
+        .reply-section .send-button svg {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="left">
+            <img src="logo.png">
+        </div>
+        <div class="right">
+            <div class="searchbar">
+                <input type="text">
+            </div>
+            <div class="profile"></div>
+        </div>
+    </header>
+    <main>
+        <div class="sidebar">
+            <div class="menu">
+                <i>Q & A Forum</i>
+            </div>
+            <div class="menu">
+                <i>Appointments</i>
+            </div>
+            <div class="menu">
+                <i>Q & A Forum</i>
+            </div>
+        </div>
+        <!-- <div class="feed">
+            <div class="posts-container" id="posts-container">
+            </div>
+        </div> -->
+        <div class="feed">
+            <div class="posts"></div>
+        </div>
+    </main>
+    <script type="module">
+        // Import the Supabase library
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Initialize Supabase
+        const supabaseUrl = 'https://ccizoauqplzkijxodftc.supabase.co'; // Replace with your Supabase URL
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjaXpvYXVxcGx6a2lqeG9kZnRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAwMTEwMzMsImV4cCI6MjAzNTU4NzAzM30.8RKYVtaOICNVylnDhNpn-Vtb_ScP42iO5cjlEHiBKWk'; // Replace with your Supabase anonymous key
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendButton = document.querySelector('.send-button');
+            const postInput = document.querySelector('.post-input input[type="text"]');
+            const imageUploadButton = document.querySelector('.image-upload-button');
+            const imageUploadInput = document.querySelector('#image-upload');
+            const postsContainer = document.querySelector('.posts');
+            const modal = document.querySelector('#post-modal');
+            const closeModal = document.querySelector('.modal .close');
+            const submitPostButton = document.querySelector('#submit-post');
+            let newPostContent = '';
+            let images = [];
+
+            fetchDBData();
+
+            imageUploadButton.addEventListener('click', () => {
+                imageUploadInput.click();
+            });
+
+            imageUploadInput.addEventListener('change', (event) => {
+                images = Array.from(event.target.files);
+                console.log('Selected images:', images);
+                if (images.length > 0) {
+                    displayImagePreviews(images);
+                }
+            });
+
+            sendButton.addEventListener('click', () => {
+                newPostContent = postInput.value.trim();
+                console.log('New post content:', newPostContent);
+                console.log('Images:', images);
+
+                if (newPostContent || images.length > 0) {
+                    modal.style.display = 'block';
+                }
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            submitPostButton.addEventListener('click', () => {
+                const userName = document.querySelector('#user-name').value.trim();
+                const userPhone = document.querySelector('#user-phone').value.trim();
+
+                if (userName && userPhone) {
+                    const newPost = createPost(newPostContent, images, userName);
+                    appendDBData(newPostContent, userName, userPhone);
+                    postsContainer.prepend(newPost);
+                    postInput.value = '';
+                    imageUploadInput.value = '';
+                    modal.style.display = 'none';
+                    clearImagePreviews();
+                } else {
+                    alert('Please enter both name and phone number');
+                }
+            });
+
+            async function appendDBData(newPostContent, userName, userPhone) {
+                const content = newPostContent;
+                const created_at = new Date().toLocaleString(); // Save the full date and time
+                const name = userName;
+                const phone = userPhone;
+                const { data, error } = await supabase
+                    .from('formPosts')
+                    .insert([
+                        { phone, created_at, name, content }
+                    ]);
+
+                if (error) {
+                    console.error('Error:', error.message);
+                } else {
+                    console.log('Data inserted:', data);
+                    alert('Data submitted successfully!');
+                }
+            }
+
+            async function fetchDBData() {
+                const { data, error } = await supabase
+                    .from('formPosts')
+                    .select('created_at, name, content, comment');
+
+                if (error) {
+                    console.error('Error fetching data:', error.message);
+                    return;
+                }
+
+                if (data) {
+                    data.forEach(row => {
+                        // Check if comment is a single string or multiple key-value pairs
+                        const comments = parseComments(row.comment);
+                        const post = createPost(row.content, [], row.name, comments);
+                        postsContainer.append(post);
+                    });
+                }
+            }
+
+            function parseComments(comment) {
+                if (typeof comment === 'string') {
+                    try {
+                        // Split the comment string into individual comment entries
+                        const entries = comment.match(/"([^"]+)":"([^"]+)"/g);
+
+                        // Map each entry to extract user and text
+                        const parsedComments = entries.map(entry => {
+                            const [user, text] = entry.split('":"');
+                            return {
+                                user: user.replace(/"/g, ''),
+                                text: text.replace(/"/g, '')
+                            };
+                        });
+
+                        return parsedComments;
+                    } catch (e) {
+                        console.error('Error parsing comments:', e);
+                        return [{ user: 'Unknown', text: comment }];
+                    }
+                }
+                return [];
+            }
+
+            function createPost(content, images, userName, comments) {
+                const post = document.createElement('div');
+                post.classList.add('post');
+
+                const postHeader = document.createElement('div');
+                postHeader.classList.add('post-header');
+
+                const userIcon = document.createElement('i');
+                userIcon.classList.add('fas', 'fa-user-circle', 'fa-2x', 'user-icon');
+
+                const userNameElem = document.createElement('span');
+                userNameElem.classList.add('user-name');
+                userNameElem.textContent = userName;
+
+                const postTime = document.createElement('span');
+                postTime.classList.add('post-time');
+                postTime.textContent = new Date().toLocaleTimeString();
+
+                postHeader.append(userIcon, userNameElem, postTime);
+
+                const postContent = document.createElement('div');
+                postContent.classList.add('post-content');
+                postContent.textContent = content;
+
+                post.append(postHeader, postContent);
+
+                images.forEach(image => {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.classList.add('image-container');
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = URL.createObjectURL(image);
+                    imgElement.classList.add('post-image');
+
+                    imgContainer.append(imgElement);
+                    post.append(imgContainer);
+                });
+
+                if (comments && Array.isArray(comments) && comments.length > 0) {
+                    const postComments = document.createElement('div');
+                    postComments.classList.add('post-comments');
+                    const hiddenComments = comments.slice(1); // Get all comments except the first one
+
+                    hiddenComments.forEach(comment => {
+                        const commentContainer = document.createElement('div');
+                        commentContainer.classList.add('comment', 'hidden');
+
+                        const commentUser = document.createElement('span');
+                        commentUser.classList.add('comment-user');
+                        commentUser.textContent = `${comment.user}:`;
+
+                        const commentText = document.createElement('span');
+                        commentText.classList.add('comment-text');
+                        commentText.textContent = comment.text;
+
+                        commentContainer.append(commentUser, commentText);
+                        postComments.append(commentContainer);
+                    });
+
+                    // Always add the first comment
+                    const firstComment = document.createElement('div');
+                    firstComment.classList.add('comment');
+
+                    const firstCommentUser = document.createElement('span');
+                    firstCommentUser.classList.add('comment-user');
+                    firstCommentUser.textContent = `${comments[0].user}:`;
+
+                    const firstCommentText = document.createElement('span');
+                    firstCommentText.classList.add('comment-text');
+                    firstCommentText.textContent = comments[0].text;
+
+                    firstComment.append(firstCommentUser, firstCommentText);
+                    postComments.prepend(firstComment); // Insert first comment at the beginning
+
+                    post.append(postComments);
+
+                    if (hiddenComments.length > 0) {
+                        const showCommentsButton = document.createElement('button');
+                        showCommentsButton.classList.add('show-comments');
+                        showCommentsButton.textContent = 'Show more comments';
+                        showCommentsButton.addEventListener('click', function () {
+                            viewCommentsF(post);
+                        });
+                        post.append(showCommentsButton);
+                    }
+                } else {
+                    const replyButton = document.createElement('button');
+                    replyButton.textContent = 'Reply';
+                    replyButton.classList.add('action-button');
+                    post.append(replyButton);
+
+                    const replySection = document.createElement('div');
+                    replySection.classList.add('reply-section');
+
+                    const replyTextarea = document.createElement('textarea');
+                    replyTextarea.classList.add('reply-textarea');
+                    replySection.append(replyTextarea);
+
+                    const sendButton = document.createElement('button');
+                    sendButton.textContent = 'Send';
+                    sendButton.classList.add('send-button');
+
+                    sendButton.innerHTML += `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="none" d="M0 0h24v24H0z"/>
+            <path d="M2.57 13.54L20.8 3.77c.53-.29 1.2.19 1.01.77l-3.63 10.9c-.22.67-1.02.97-1.63.67l-3.16-1.58c-.36-.18-.79-.13-1.1.12l-1.52 1.21a1.4 1.4 0 0 0-.54 1.56l1.29 4.12c.23.75-.49 1.47-1.24 1.24l-4.12-1.29c-.5-.16-.9-.54-1.08-1.03l-1.58-3.16a1.2 1.2 0 0 0-.67-.57l-1.2-.3c-.73-.18-.77-1.17-.07-1.45z" fill="rgba(255,255,255,1)"/>
+        </svg>`;
+
+                    replySection.append(sendButton);
+                    post.append(replySection);
+
+                    replyButton.addEventListener('click', async () => {
+                        replySection.style.display = 'block';
+                        replyTextarea.value = 'Fetching response...';
+
+                        try {
+                            const answer = await gptResponse(content);
+                            replyTextarea.value = answer;
+                        } catch (error) {
+                            replyTextarea.value = 'Error fetching response';
+                            console.error('Error fetching response from GPT:', error);
+                        }
+                    });
+
+                    sendButton.addEventListener('click', async () => {
+                        const replyContent = replyTextarea.value.trim();
+                        if (replyContent !== '' && replyContent !== 'Error fetching response') { // Add this condition
+                            await addCommentToPost(post, replyContent);
+                            replyTextarea.value = '';
+                            replySection.style.display = 'none';
+                        } else {
+                            alert('There was an Error Please try again!');
+                        }
+                    });
+
+                }
+
+                return post;
+            }
+
+
+            function viewCommentsF(post) {
+                const hiddenComments = post.querySelectorAll('.comment.hidden');
+                hiddenComments.forEach(comment => {
+                    comment.classList.remove('hidden');
+                });
+
+                // Hide more comments button
+                const showCommentsButton = post.querySelector('.show-comments');
+                if (showCommentsButton) {
+                    showCommentsButton.style.display = 'none';
+                }
+
+                // Show hide comments button if there are unhidden comments
+                const hideCommentsButton = document.createElement('button');
+                hideCommentsButton.classList.add('hide-comments');
+                hideCommentsButton.textContent = 'Hide comments';
+                hideCommentsButton.addEventListener('click', function () {
+                    hideCommentsF(post, hideCommentsButton, showCommentsButton);
+                });
+                post.append(hideCommentsButton);
+            }
+
+            function hideCommentsF(post, hideCommentsButton, showCommentsButton) {
+                const shownComments = post.querySelectorAll('.comment:not(.hidden)');
+                shownComments.forEach(comment => {
+                    comment.classList.add('hidden');
+                });
+
+                // Remove hide comments button
+                hideCommentsButton.remove();
+
+                // Show more comments button
+                if (showCommentsButton) {
+                    showCommentsButton.style.display = 'block';
+                }
+            }
+
+            function displayImagePreviews(images) {
+                const previewContainer = document.querySelector('.image-previews');
+                previewContainer.innerHTML = ''; // Clear previous previews
+
+                Array.from(images).forEach(image => {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.classList.add('image-container');
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = URL.createObjectURL(image);
+                    imgElement.classList.add('image-preview');
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('delete-image-button');
+                    deleteButton.innerHTML = '&times;';
+                    deleteButton.addEventListener('click', () => {
+                        imgContainer.remove();
+                        imageUploadInput.value = '';
+                    });
+
+                    imgContainer.append(imgElement, deleteButton);
+                    previewContainer.append(imgContainer);
+                });
+            }
+
+            async function addCommentToPost(post, replyContent) {
+                const author = post.querySelector('.user-name').textContent;
+                const { data, error } = await supabase
+                    .from('formPosts')
+                    .select('comment')
+                    .eq('name', author);
+
+                if (error) {
+                    console.error('Error fetching data:', error.message);
+                    return;
+                }
+
+                if (data.length > 0) {
+                    let comments = [];
+                    if (data[0].comment) {
+                        try {
+                            const entries = data[0].comment.match(/"([^"]+)":"([^"]+)"/g);
+                            comments = entries.map(entry => {
+                                const [user, text] = entry.split('":"');
+                                return {
+                                    user: user.replace(/"/g, ''),
+                                    text: text.replace(/"/g, '')
+                                };
+                            });
+                        } catch (e) {
+                            comments = [{ user: 'Unknown', text: data[0].comment }];
+                        }
+                    }
+
+                    comments.push({ user: 'doctor', text: replyContent });
+
+                    const commentsString = comments.map(c => `"${c.user}":"${c.text}"`).join(',');
+                    const updatedComment = `{${commentsString}}`;
+
+                    const { error: updateError } = await supabase
+                        .from('formPosts')
+                        .update({ comment: updatedComment })
+                        .eq('name', author);
+
+                    if (updateError) {
+                        console.error('Error updating data:', updateError.message);
+                        return;
+                    }
+
+                    const newCommentContainer = document.createElement('div');
+                    newCommentContainer.classList.add('comment');
+
+                    const newCommentUser = document.createElement('span');
+                    newCommentUser.classList.add('comment-user');
+                    newCommentUser.textContent = 'doctor:';
+
+                    const newCommentText = document.createElement('span');
+                    newCommentText.classList.add('comment-text');
+                    newCommentText.textContent = replyContent;
+
+                    newCommentContainer.append(newCommentUser, newCommentText);
+                    post.querySelector('.post-comments').append(newCommentContainer);
+                }
+            }
+
+            async function gptResponse(prompt) {
+                try {
+                    const response = await fetch('http://localhost:3000/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: prompt })
+                    });
+
+                    const data = await response.json();
+                    return data.botResponse;
+                } catch (error) {
+                    console.error('Error fetching GPT response:', error);
+                    throw error;
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
