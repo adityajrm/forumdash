@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>Layout Example</title>
+    <title>OneHat Dashboard</title>
     <style>
         body {
             font-family: 'Nunito Sans', sans-serif;
@@ -318,85 +318,17 @@
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
         // Initialize Supabase
-        const supabaseUrl = 'https://ccizoauqplzkijxodftc.supabase.co'; // Replace with your Supabase URL
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjaXpvYXVxcGx6a2lqeG9kZnRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAwMTEwMzMsImV4cCI6MjAzNTU4NzAzM30.8RKYVtaOICNVylnDhNpn-Vtb_ScP42iO5cjlEHiBKWk'; // Replace with your Supabase anonymous key
+        const supabaseUrl = 'https://jbmrpxavpjyjskxfspgg.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpibXJweGF2cGp5anNreGZzcGdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA3Mjk0MDQsImV4cCI6MjAzNjMwNTQwNH0.xjWZjuS4ddX2DgkzxiJMtdnlQFgaw7u5q1-_Sgxv6ew';
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         document.addEventListener('DOMContentLoaded', () => {
             const sendButton = document.querySelector('.send-button');
-            const postInput = document.querySelector('.post-input input[type="text"]');
-            const imageUploadButton = document.querySelector('.image-upload-button');
-            const imageUploadInput = document.querySelector('#image-upload');
             const postsContainer = document.querySelector('.posts');
-            const modal = document.querySelector('#post-modal');
-            const closeModal = document.querySelector('.modal .close');
-            const submitPostButton = document.querySelector('#submit-post');
             let newPostContent = '';
             let images = [];
 
             fetchDBData();
-
-            imageUploadButton.addEventListener('click', () => {
-                imageUploadInput.click();
-            });
-
-            imageUploadInput.addEventListener('change', (event) => {
-                images = Array.from(event.target.files);
-                console.log('Selected images:', images);
-                if (images.length > 0) {
-                    displayImagePreviews(images);
-                }
-            });
-
-            sendButton.addEventListener('click', () => {
-                newPostContent = postInput.value.trim();
-                console.log('New post content:', newPostContent);
-                console.log('Images:', images);
-
-                if (newPostContent || images.length > 0) {
-                    modal.style.display = 'block';
-                }
-            });
-
-            closeModal.addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            submitPostButton.addEventListener('click', () => {
-                const userName = document.querySelector('#user-name').value.trim();
-                const userPhone = document.querySelector('#user-phone').value.trim();
-
-                if (userName && userPhone) {
-                    const newPost = createPost(newPostContent, images, userName);
-                    appendDBData(newPostContent, userName, userPhone);
-                    postsContainer.prepend(newPost);
-                    postInput.value = '';
-                    imageUploadInput.value = '';
-                    modal.style.display = 'none';
-                    clearImagePreviews();
-                } else {
-                    alert('Please enter both name and phone number');
-                }
-            });
-
-            async function appendDBData(newPostContent, userName, userPhone) {
-                const content = newPostContent;
-                const created_at = new Date().toLocaleString(); // Save the full date and time
-                const name = userName;
-                const phone = userPhone;
-                const { data, error } = await supabase
-                    .from('formPosts')
-                    .insert([
-                        { phone, created_at, name, content }
-                    ]);
-
-                if (error) {
-                    console.error('Error:', error.message);
-                } else {
-                    console.log('Data inserted:', data);
-                    alert('Data submitted successfully!');
-                }
-            }
 
             async function fetchDBData() {
                 const { data, error } = await supabase
@@ -468,17 +400,6 @@
 
                 post.append(postHeader, postContent);
 
-                images.forEach(image => {
-                    const imgContainer = document.createElement('div');
-                    imgContainer.classList.add('image-container');
-
-                    const imgElement = document.createElement('img');
-                    imgElement.src = URL.createObjectURL(image);
-                    imgElement.classList.add('post-image');
-
-                    imgContainer.append(imgElement);
-                    post.append(imgContainer);
-                });
 
                 if (comments && Array.isArray(comments) && comments.length > 0) {
                     const postComments = document.createElement('div');
@@ -620,31 +541,6 @@
                 }
             }
 
-            function displayImagePreviews(images) {
-                const previewContainer = document.querySelector('.image-previews');
-                previewContainer.innerHTML = ''; // Clear previous previews
-
-                Array.from(images).forEach(image => {
-                    const imgContainer = document.createElement('div');
-                    imgContainer.classList.add('image-container');
-
-                    const imgElement = document.createElement('img');
-                    imgElement.src = URL.createObjectURL(image);
-                    imgElement.classList.add('image-preview');
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.classList.add('delete-image-button');
-                    deleteButton.innerHTML = '&times;';
-                    deleteButton.addEventListener('click', () => {
-                        imgContainer.remove();
-                        imageUploadInput.value = '';
-                    });
-
-                    imgContainer.append(imgElement, deleteButton);
-                    previewContainer.append(imgContainer);
-                });
-            }
-
             async function addCommentToPost(post, replyContent) {
                 const author = post.querySelector('.user-name').textContent;
                 const { data, error } = await supabase
@@ -657,53 +553,52 @@
                     return;
                 }
 
-                if (data.length > 0) {
-                    let comments = [];
-                    if (data[0].comment) {
-                        try {
-                            const entries = data[0].comment.match(/"([^"]+)":"([^"]+)"/g);
-                            comments = entries.map(entry => {
-                                const [user, text] = entry.split('":"');
-                                return {
-                                    user: user.replace(/"/g, ''),
-                                    text: text.replace(/"/g, '')
-                                };
-                            });
-                        } catch (e) {
-                            comments = [{ user: 'Unknown', text: data[0].comment }];
-                        }
+                let comments = [];
+                if (data.length > 0 && data[0].comment) {
+                    try {
+                        const entries = data[0].comment.match(/"([^"]+)":"([^"]+)"/g);
+                        comments = entries.map(entry => {
+                            const [user, text] = entry.split('":"');
+                            return {
+                                user: user.replace(/"/g, ''),
+                                text: text.replace(/"/g, '')
+                            };
+                        });
+                    } catch (e) {
+                        comments = [{ user: 'Unknown', text: data[0].comment }];
                     }
-
-                    comments.push({ user: 'doctor', text: replyContent });
-
-                    const commentsString = comments.map(c => `"${c.user}":"${c.text}"`).join(',');
-                    const updatedComment = `{${commentsString}}`;
-
-                    const { error: updateError } = await supabase
-                        .from('formPosts')
-                        .update({ comment: updatedComment })
-                        .eq('name', author);
-
-                    if (updateError) {
-                        console.error('Error updating data:', updateError.message);
-                        return;
-                    }
-
-                    const newCommentContainer = document.createElement('div');
-                    newCommentContainer.classList.add('comment');
-
-                    const newCommentUser = document.createElement('span');
-                    newCommentUser.classList.add('comment-user');
-                    newCommentUser.textContent = 'doctor:';
-
-                    const newCommentText = document.createElement('span');
-                    newCommentText.classList.add('comment-text');
-                    newCommentText.textContent = replyContent;
-
-                    newCommentContainer.append(newCommentUser, newCommentText);
-                    post.querySelector('.post-comments').append(newCommentContainer);
                 }
+
+                comments.push({ user: 'doctor', text: replyContent });
+
+                const commentsString = comments.map(c => `"${c.user}":"${c.text}"`).join(',');
+                const updatedComment = `{${commentsString}}`;
+
+                const { error: updateError } = await supabase
+                    .from('formPosts')
+                    .update({ comment: updatedComment })
+                    .eq('name', author);
+
+                if (updateError) {
+                    console.error('Error updating data:', updateError.message);
+                    return;
+                }
+                alert('Comment added successfully!');
+                window.location.reload();
+                
             }
+
+            // Ensure the event listeners are set up correctly in the existing code
+            sendButton.addEventListener('click', async () => {
+                const replyContent = replyTextarea.value.trim();
+                if (replyContent !== '' && replyContent !== 'Error fetching response') {
+                    await addCommentToPost(post, replyContent);
+                    replyTextarea.value = '';
+                    replySection.style.display = 'none';
+                } else {
+                    alert('There was an error. Please try again!');
+                }
+            });
 
             async function gptResponse(prompt) {
                 try {
